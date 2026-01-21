@@ -44,5 +44,30 @@
     
     <input type="submit" value="Cadastrar">
   </form>
+
+  <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Agencia</th>
+          <th>Conta</th>
+          <th>Saldo</th>
+          <th>Editar</th>
+          <th>Excluir</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($resultado as $linhas): ?>
+        <tr>
+          <td><?= $linhas['titular'] ?></td>
+          <td><?= $linhas['agencia'] ?></td>
+          <td><?= $linhas['conta'] ?></td>
+          <td><?= $linhas['saldo'] ?></td>
+          <td><a href="editar.php?id=<?= $linhas['id'] ?>">Editar</a></td>
+          <td><a href="excluir.php?id=<?= $linhas['id'] ?>">Excluir</a></td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+  </table>
 </body>
 </html>
