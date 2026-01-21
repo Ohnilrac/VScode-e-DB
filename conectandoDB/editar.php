@@ -8,19 +8,36 @@
   
   $id = $_GET['id'];
 
-  $sql = "SELECT titular, agencia, conta, saldo, senha FROM contas WHERE id = :id"; // Fazendo a consulta para selecionar o usuário pelo ID, utilizando os : para evitar SQL injection
-  $consulta = $pdo->prepare($sql); // Preparando a consulta
+  $sql_busca = "SELECT * FROM contas WHERE id = :id"; // Query para buscar o usuário pelo ID
+  $consulta = $pdo->prepare($sql_busca);
   $consulta->execute(['id' => $id]); //Executando a consulta somente com o ID fornecido porque é o unico dado necessário para pegar o usuário correto
-  $usuario = $consulta->fetch(PDO::FETCH_ASSOC); // Criando variavel usuario para armazenar os dados do usuario encontrado, e o feth é para ele pegar somente a primeira linha encontrada, por fim o FETCH_ASSOC para trazer exatamente os nomes das colunas do banco de dados
-
+  $usuario = $consulta->fetch(PDO::FETCH_ASSOC); 
+  
   if (!$usuario) {
     header("Location: . index.php");
     exit();
     }
 
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') { //Request method verifica se houve envio de dados via POST
+    $titular_novo = $_POST['titular'];
+    $agencia_nova = $_POST['agencia'];
+    $conta_nova = $_POST['conta'];
+
+    $sql_atualizar = "UPDATE contas SET titular = :titular, agencia = :agencia, conta = :conta WHERE id = :id"; // Query para atualizar os dados do usuário
+    $stmt = $pdo->prepare($sql_atualizar);
+    $stmt->execute([
+      ':titular' => $titular_novo,
+      ':agencia' => $agencia_nova,
+      ':conta' => $conta_nova,
+      ':id' => $id
+    ]);
+
+    header("Location: ./index.php");
+    exit();
+  }
 ?>
 
-<form action="atualizar.php" method="post">
+<form method="post">
   <input type="hidden" name="id" value="<?= $id ?>"> <!-- Campo oculto para armazenar o ID do usuário -->
 
   <label for="titular">Titular</label>
@@ -30,5 +47,6 @@
   <label for="conta">Conta</label>
   <input type="number" name="conta" id="id_conta" value="<?= $usuario['conta'] ?>"/>
   <input type="submit" value="Atualizar"/>
+
 
 </form>
