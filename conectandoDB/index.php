@@ -64,7 +64,7 @@
           <td><?= $linhas['conta'] ?></td>
           <td><?= $linhas['saldo'] ?></td>
           <td><a href="editar.php?id=<?= $linhas['id'] ?>">Editar</a></td>
-          <td><a href="excluir.php?id=<?= $linhas['id'] ?>">Excluir</a></td>
+          <td><a href="excluir.php?id=<?= $linhas['id'] ?>&conta=<?= $linhas['conta'] ?>">Excluir</a></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
